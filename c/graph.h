@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include "common/linkedlist.h"
 
 #define INTERFACE_NAME_SIZE 16
@@ -40,6 +41,11 @@ typedef struct Graph
     LinkedList node;
 } Graph;
 
+static inline Node *node_from_linked_list(LinkedList *listNode)
+{
+    return (Node *)((void *)listNode - GET_STRUCT_OFFSET(Node, node));
+}
+
 static inline Node *get_neighbor_node(Interface *interface)
 {
     if (interface == NULL || interface->link == NULL)
@@ -64,6 +70,52 @@ static inline size_t get_node_interface_available_slot(Node *node)
     }
 
     return -1;
+}
+
+static inline Interface *get_interface_by_name(Node *node, char *name)
+{
+    assert(node);
+    assert(name);
+
+    for (int i = 0; i < NODE_INTERFACE_MAX; i++)
+    {
+        Interface *interface = node->interfaces[i];
+
+        if (interface == NULL)
+        {
+            return NULL;
+        }
+
+        if (strcmp(name, interface->name) == 0)
+        {
+            return interface;
+        }
+    }
+}
+
+static inline Node *get_node_by_name(Graph *graph, char *name)
+{
+    assert(graph);
+    assert(name);
+
+    LinkedList *listNode = &graph->node;
+
+    while (listNode->next != NULL)
+    {
+        Node *node = node_from_linked_list(listNode->next);
+
+        if (node == NULL)
+        {
+            return NULL;
+        }
+
+        if (strcmp(name, node->name) == 0)
+        {
+            return node;
+        }
+
+        listNode = listNode->next;
+    }
 }
 
 Graph *create_new_graph(char *name);

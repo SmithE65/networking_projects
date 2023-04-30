@@ -12,4 +12,6 @@ Graph *build_first_topo()
     insert_link(R0_re, R1_re, "eth0", "eth1", 5);
     insert_link(R1_re, R2_re, "eth2", "eth3", 4);
     insert_link(R0_re, R2_re, "eth4", "eth5", 9);
+
+    return graph;
 }

@@ -29,25 +29,22 @@
 //     }
 // }
 
+extern Graph *build_first_topo();
+
 int main(int argc, char **argv)
 {
     printf("Hello, world!\n");
 
-    Node n1 = {"node1"};
-    Node n2 = {"node2"};
-    Link l = {{"eth0", &n1}, {"eth1", &n2}, 0};
-    n1.interfaces[0] = &l.interface1;
-    n2.interfaces[0] = &l.interface2;
-    l.interface1.link = &l;
-    l.interface2.link = &l;
+    Graph *graph = build_first_topo();
 
-    Node *result_node = get_neighbor_node(&n1.interfaces[0]->link->interface1);
+    Node *result_node = get_node_by_name(graph, "R1_re");
     assert(result_node);
 
-    printf("Should be 'node2': '%s'\n", result_node->name);
+    printf("Should be 'R1_re': '%s'\n", result_node->name);
 
-    int slot = get_node_interface_available_slot(&n1);
-    printf("Should be '1': '%d'\n", slot);
+    Interface *interface = get_interface_by_name(result_node, "eth2");
+    assert(interface);
+    printf("Should be 'eth2': '%s'\n", interface->name);
 
     return 0;
 }
