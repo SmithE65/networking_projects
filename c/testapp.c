@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "linked_list/linkedlist.h"
+#include "common/linkedlist.h"
 #include "graph.h"
 
 // typedef struct Employee
@@ -36,12 +36,12 @@ int main(int argc, char **argv)
     Node n1 = {"node1"};
     Node n2 = {"node2"};
     Link l = {{"eth0", &n1}, {"eth1", &n2}, 0};
-    n1.interface[0] = &l.interface1;
-    n2.interface[0] = &l.interface2;
+    n1.interfaces[0] = &l.interface1;
+    n2.interfaces[0] = &l.interface2;
     l.interface1.link = &l;
     l.interface2.link = &l;
 
-    Node *result_node = get_neighbor_node(&n1.interface[0]->link->interface1);
+    Node *result_node = get_neighbor_node(&n1.interfaces[0]->link->interface1);
     assert(result_node);
 
     printf("Should be 'node2': '%s'\n", result_node->name);

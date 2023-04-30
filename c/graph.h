@@ -3,9 +3,9 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "linked_list/linkedlist.h"
+#include "common/linkedlist.h"
 
-#define IF_NAME_SIZE 16
+#define INTERFACE_NAME_SIZE 16
 #define NODE_NAME_SIZE 16
 #define TOPOLOGY_NAME_SIZE 32
 #define NODE_INTERFACE_MAX 10
@@ -15,7 +15,7 @@ typedef struct Link Link;
 
 typedef struct Interface
 {
-    char name[IF_NAME_SIZE];
+    char name[INTERFACE_NAME_SIZE];
     Node *parent;
     Link *link;
 } Interface;
@@ -30,7 +30,7 @@ typedef struct Link
 typedef struct Node
 {
     char name[NODE_NAME_SIZE];
-    Interface *interface[NODE_INTERFACE_MAX];
+    Interface *interfaces[NODE_INTERFACE_MAX];
     LinkedList node;
 } Node;
 
@@ -51,13 +51,13 @@ static inline Node *get_neighbor_node(Interface *interface)
     return &link->interface1 == interface ? link->interface2.parent : link->interface1.parent;
 }
 
-static inline int get_node_interface_available_slot(Node *node)
+static inline size_t get_node_interface_available_slot(Node *node)
 {
     assert(node);
 
     for (int i = 0; i < NODE_INTERFACE_MAX; i++)
     {
-        if (node->interface[i] == NULL)
+        if (node->interfaces[i] == NULL)
         {
             return i;
         }
@@ -65,5 +65,9 @@ static inline int get_node_interface_available_slot(Node *node)
 
     return -1;
 }
+
+Graph *create_new_graph(char *name);
+Node *create_graph_node(Graph *graph, char *name);
+void insert_link(Node *node1, Node *node2, char *interface1_name, char *interface2_name, unsigned int cost);
 
 #endif
