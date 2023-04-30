@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <assert.h>
 #include <stdlib.h>
 #include "linked_list/linkedlist.h"
 
@@ -38,5 +39,31 @@ typedef struct Graph
     char topology_name[TOPOLOGY_NAME_SIZE];
     LinkedList node;
 } Graph;
+
+static inline Node *get_neighbor_node(Interface *interface)
+{
+    if (interface == NULL || interface->link == NULL)
+    {
+        return NULL;
+    }
+
+    Link *link = interface->link;
+    return &link->interface1 == interface ? link->interface2.parent : link->interface1.parent;
+}
+
+static inline int get_node_interface_available_slot(Node *node)
+{
+    assert(node);
+
+    for (int i = 0; i < NODE_INTERFACE_MAX; i++)
+    {
+        if (node->interface[i] == NULL)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 #endif
