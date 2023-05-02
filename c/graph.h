@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common/linkedlist.h"
+#include "net.h"
 
 #define INTERFACE_NAME_SIZE 16
 #define NODE_NAME_SIZE 16
@@ -19,6 +20,7 @@ typedef struct Interface
     char name[INTERFACE_NAME_SIZE];
     Node *parent;
     Link *link;
+    InterfaceNetworkProperties Properties;
 } Interface;
 
 typedef struct Link
@@ -32,6 +34,7 @@ typedef struct Node
 {
     char name[NODE_NAME_SIZE];
     Interface *interfaces[NODE_INTERFACE_MAX];
+    NodeNetworkProperties Properties;
     LinkedList node;
 } Node;
 
@@ -41,12 +44,12 @@ typedef struct Graph
     LinkedList node;
 } Graph;
 
-static inline Node *node_from_linked_list(LinkedList *listNode)
+static inline Node *GetNodeFromLinkedList(LinkedList *listNode)
 {
     return (Node *)((void *)listNode - GET_STRUCT_OFFSET(Node, node));
 }
 
-static inline Node *get_neighbor_node(Interface *interface)
+static inline Node *GetNeighborNode(Interface *interface)
 {
     if (interface == NULL || interface->link == NULL)
     {
@@ -57,7 +60,7 @@ static inline Node *get_neighbor_node(Interface *interface)
     return &link->interface1 == interface ? link->interface2.parent : link->interface1.parent;
 }
 
-static inline size_t get_node_interface_available_slot(Node *node)
+static inline size_t GetNextAvailableSlotIndex(Node *node)
 {
     assert(node);
 
@@ -72,7 +75,7 @@ static inline size_t get_node_interface_available_slot(Node *node)
     return -1;
 }
 
-static inline Interface *get_interface_by_name(Node *node, char *name)
+static inline Interface *GetInterfaceByName(Node *node, const char *name)
 {
     assert(node);
     assert(name);
@@ -93,7 +96,7 @@ static inline Interface *get_interface_by_name(Node *node, char *name)
     }
 }
 
-static inline Node *get_node_by_name(Graph *graph, char *name)
+static inline Node *GetNodeByName(Graph *graph, char *name)
 {
     assert(graph);
     assert(name);
@@ -102,7 +105,7 @@ static inline Node *get_node_by_name(Graph *graph, char *name)
 
     while (listNode->next != NULL)
     {
-        Node *node = node_from_linked_list(listNode->next);
+        Node *node = GetNodeFromLinkedList(listNode->next);
 
         if (node == NULL)
         {
@@ -118,8 +121,10 @@ static inline Node *get_node_by_name(Graph *graph, char *name)
     }
 }
 
-Graph *create_new_graph(char *name);
-Node *create_graph_node(Graph *graph, char *name);
-void insert_link(Node *node1, Node *node2, char *interface1_name, char *interface2_name, unsigned int cost);
+Graph *CreateNewGraph(char *name);
+Node *CreateGraphNode(Graph *graph, char *name);
+void InsertLink(Node *node1, Node *node2, char *interface1_name, char *interface2_name, unsigned int cost);
+
+void DumpGraph(Graph *graph);
 
 #endif
