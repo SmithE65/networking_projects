@@ -94,6 +94,8 @@ static inline Interface *GetInterfaceByName(Node *node, const char *name)
             return interface;
         }
     }
+
+    return NULL;
 }
 
 static inline Node *GetNodeByName(Graph *graph, char *name)
@@ -119,6 +121,8 @@ static inline Node *GetNodeByName(Graph *graph, char *name)
 
         listNode = listNode->next;
     }
+
+    return NULL;
 }
 
 Graph *CreateNewGraph(char *name);
