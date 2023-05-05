@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include "common/linkedlist.h"
+#include "../common/linkedlist.h"
 #include "net.h"
 
 #define INTERFACE_NAME_SIZE 16

@@ -4,7 +4,7 @@
 #include <memory.h>
 
 #include "graph.h"
-#include "util.h"
+#include "../util.h"
 
 void AssignMacAddress(Interface *interface)
 {

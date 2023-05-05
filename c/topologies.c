@@ -1,10 +1,9 @@
-#include <assert.h>
-#include "graph.h"
-#include "net.h"
+#include "simulator/graph.h"
+#include "simulator/net.h"
 
-Graph *build_first_topo()
+Graph *build_first_topology()
 {
-    Graph *graph = CreateNewGraph("First Topo");
+    Graph *graph = CreateNewGraph("First Topology");
 
     Node *R0_re = CreateGraphNode(graph, "R0_re");
     Node *R1_re = CreateGraphNode(graph, "R1_re");

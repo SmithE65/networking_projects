@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "common/linkedlist.h"
+#include "../common/linkedlist.h"
 
 void set_string(char *dest, const char *src, size_t max)
 {
