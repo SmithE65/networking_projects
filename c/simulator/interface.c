@@ -3,17 +3,20 @@
 //
 
 #include <assert.h>
+#include <string.h>
 #include "interface.h"
 #include "../util.h"
 
-void AddInterface(Node *node, Interface *interface) {
+void AddInterface(Node *node, Interface *interface)
+{
     size_t index = GetNextAvailableSlotIndex(node);
     assert(index >= 0);
     node->Interfaces[index] = interface;
     interface->Parent = node;
 }
 
-void InsertLink(Interface *a, Interface *b, unsigned int cost) {
+void InsertLink(Interface *a, Interface *b, unsigned int cost)
+{
     assert(a);
     assert(b);
     assert(!a->Connection);
@@ -28,6 +31,9 @@ Interface *CreateInterface(char *name, char *ipAddress, char mask)
 {
     Interface *result = calloc(1, sizeof(Interface));
     assert(result);
-    stpncpy(result->Name, name, INTERFACE_NAME_SIZE - 1);
+    strncpy(result->Name, name, INTERFACE_NAME_SIZE - 1);
     result->Properties.IpAddress = ParseIpAddress(ipAddress);
+    result->Properties.HasIpAddress = true;
+    result->Properties.Mask = mask;
+    return result;
 }

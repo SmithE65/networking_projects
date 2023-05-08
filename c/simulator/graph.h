@@ -13,7 +13,9 @@ typedef struct Graph
 {
     char topology_name[TOPOLOGY_NAME_SIZE];
     Node **Nodes;
-    size_t Count;
+    size_t NodesCount;
+    Link **Links;
+    size_t LinksCount;
 } Graph;
 
 static inline Node *GetNodeByName(Graph *graph, char *name)
@@ -21,7 +23,7 @@ static inline Node *GetNodeByName(Graph *graph, char *name)
     assert(graph);
     assert(name);
 
-    for (int i = 0; i < graph->Count; ++i) {
+    for (int i = 0; i < graph->NodesCount; ++i) {
         if (strcmp(name, graph->Nodes[i]->Name) == 0)
         {
             return graph->Nodes[i];
@@ -30,6 +32,8 @@ static inline Node *GetNodeByName(Graph *graph, char *name)
 
     return NULL;
 }
+
+void AddLink(Graph *graph, Interface *a, Interface *b, unsigned int cost);
 
 Graph *CreateNewGraph(char *name);
 Node *CreateGraphNode(Graph *graph, char *name);
